@@ -207,3 +207,46 @@ type IncomingMessage struct {
 ```
 然后发送方可以把Cmd和（或）Msg的字段填充为顶层的JSON对象，这取决于你要发送的消息类型。当向一个不符合的结构解码JSON数据时，Unmarshal，仅分配数据给那些和JSON数据相符合的结构部分。想知道哪类消息被解码了，程序员只需要简单的测试下Cmd和Msg哪个不为nil即可。
 ## 流编码和解码
+json包提供Decoder和Encoder类型以支持常见的对JSON数据流的读写操作。NewDecoder和NewEncoder函数封装了io.Reader和io.Writer接口类型：
+
+```
+func NewDecoder(r io.Reader) *Decoder
+func NewEncoder(w io.Writer) *Encoder
+```
+这里有一个样例程序，这个程序从标准输入读取一序列JSON对象，移除除了Name字段之外的所有对象，然后把JSON对象写入标准输出：
+
+```
+package main
+
+import (
+    "encoding/json"
+    "log"
+    "os"
+)
+
+func main() {
+    dec := json.NewDecoder(os.Stdin)
+    enc := json.NewEncoder(os.Stdout)
+    for {
+        var v map[string]interface{}
+        if err := dec.Decode(&v); err != nil {
+            log.Println(err)
+            return
+        }
+        for k := range v {
+            if k != "Name" {
+                delete(v, k)
+            }
+        }
+        if err := enc.Encode(&v); err != nil {
+            log.Println(err)
+        }
+    }
+}
+```
+因为无处不在的Readers和Writers，这些Encoder和Decoder可以被用于大量的场景中，比如对HTTP连接, WebSockets, 或files的读写。
+## 参考
+更多信息请参考[json package documentation](https://golang.org/pkg/encoding/json/)。关于json的使用样例，请参考[jsonrpc package](https://golang.org/pkg/net/rpc/jsonrpc/)的源文件。
+
+作者：Andrew Gerrand
+翻译：jacenr
