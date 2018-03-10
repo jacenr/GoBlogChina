@@ -205,4 +205,5 @@ type IncomingMessage struct {
     Msg *Message
 }
 ```
-（未完待续）
+然后发送方可以把Cmd和（或）Msg的字段填充为顶层的JSON对象，这取决于你要发送的消息类型。当向一个不符合的结构解码JSON数据时，Unmarshal，仅分配数据给那些和JSON数据相符合的结构部分。想知道哪类消息被解码了，程序员只需要简单的测试下Cmd和Msg哪个不为nil即可。
+## 流编码和解码
