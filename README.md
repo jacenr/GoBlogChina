@@ -3,4 +3,4 @@
   
 突然发现有谷歌翻译可以用，我还翻译什么啊（囧rz）！  
   
-![chart1](https://github.com/jacenr/GoBlogChina/blob/alg2/translation.gif)  
+![image](https://github.com/jacenr/GoBlogChina/translation.gif)  
